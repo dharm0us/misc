@@ -1,4 +1,7 @@
 <?php
+/* Compute probabilites for which team*/
+$whichTeam = 'rr';
+
 /* Current number of wins*/
 $curr = array();
 $curr['csk'] = 10;
@@ -39,11 +42,11 @@ for($possIter = 0; $possIter < $numPossibleOutcomes; $possIter++) {
 			$final[$winner] += 1;
 		}
 	}
-	$rrWins = $final['rr'];
+	$numWins = $final[$whichTeam];
 	rsort($final);
-	if($rrWins > $final[4]) { //RR has won more than the fifth placed team
+	if($numWins > $final[4]) { //RR has won more than the fifth placed team
 		$yes++;
-	} else if($rrWins < $final[3]) { //RR has won less than the fourth placed team
+	} else if($numWins < $final[3]) { //RR has won less than the fourth placed team
 		$no++;
 	} else { // There is a tie between 4th and 5th place and RR is one of them 
 		$mayBe++;
