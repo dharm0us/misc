@@ -1,19 +1,19 @@
 <?php
 /* Compute probabilites for which team*/
-$whichTeam = 'rr';
+$whichTeams= array('mi','rr','rcb','srh','csk');
 
 /* Current number of wins*/
 $curr = array();
 $curr['csk'] = 10;
-$curr['rr'] = 9;
+$curr['rr'] = 10;
 $curr['mi'] = 9;
 $curr['srh'] = 8;
 $curr['rcb'] = 8;
 
 /* Upcoming matches*/
 $matches = array();
-$matches[]=array('kkr','rcb');
-$matches[]=array('rr','csk');
+//$matches[]=array('kkr','rcb');
+//$matches[]=array('rr','csk');
 $matches[]=array('mi','srh');
 $matches[]=array('rcb','kxip');
 $matches[]=array('csk','dd');
@@ -28,32 +28,34 @@ $numPossibleOutcomes = pow(2,$numMatches);
 
 echo "numPossibleOutcomes = $numPossibleOutcomes\n";
 
-$yes = 0;
-$no = 0;
-$mayBe = 0;
+foreach($whichTeams as $whichTeam) {
+	$yes = 0;
+	$no = 0;
+	$mayBe = 0;
 
-for($possIter = 0; $possIter < $numPossibleOutcomes; $possIter++) {
-	$final = $curr;
-	for($matchIter = 0; $matchIter < $numMatches; $matchIter++) {
-		$winnerIndex = ($possIter >> $matchIter) & 1;	
-		$winner = $matches[$matchIter][$winnerIndex]; 
-		//echo $winner." ";
-		if(isset($final[$winner])) {
-			$final[$winner] += 1;
+	for($possIter = 0; $possIter < $numPossibleOutcomes; $possIter++) {
+		$final = $curr;
+		for($matchIter = 0; $matchIter < $numMatches; $matchIter++) {
+			$winnerIndex = ($possIter >> $matchIter) & 1;	
+			$winner = $matches[$matchIter][$winnerIndex]; 
+			//echo $winner." ";
+			if(isset($final[$winner])) {
+				$final[$winner] += 1;
+			}
 		}
-	}
-	$numWins = $final[$whichTeam];
-	rsort($final);
-	if($numWins > $final[4]) { //RR has won more than the fifth placed team
-		$yes++;
-	} else if($numWins < $final[3]) { //RR has won less than the fourth placed team
-		$no++;
-	} else { // There is a tie between 4th and 5th place and RR is one of them 
-		$mayBe++;
-	};
-} 
-$yesProb = round(($yes/$numPossibleOutcomes),3);
-$noProb = round(($no/$numPossibleOutcomes),3);
-$mayBeProb = round(($mayBe/$numPossibleOutcomes),3);
-echo "yes = $yesProb no = $noProb mayBe = $mayBeProb";
+		$numWins = $final[$whichTeam];
+		rsort($final);
+		if($numWins > $final[4]) { //RR has won more than the fifth placed team
+			$yes++;
+		} else if($numWins < $final[3]) { //RR has won less than the fourth placed team
+			$no++;
+		} else { // There is a tie between 4th and 5th place and RR is one of them 
+			$mayBe++;
+		};
+	} 
+	$yesProb = round(($yes/$numPossibleOutcomes),3);
+	$noProb = round(($no/$numPossibleOutcomes),3);
+	$mayBeProb = round(($mayBe/$numPossibleOutcomes),3);
+	echo "team = $whichTeam yes = $yesProb no = $noProb mayBe = $mayBeProb\n";
+}
 ?>
