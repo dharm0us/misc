@@ -2,18 +2,18 @@
 /* Compute probabilites for which team*/
 $whichTeams= array('mi','rr','rcb','srh','csk');
 
-/* Current number of wins*/
+/* Current number of wins as on the morning of 12th May 2013*/
 $curr = array();
 $curr['csk'] = 10;
-$curr['rr'] = 10;
+$curr['rr'] = 9;
 $curr['mi'] = 9;
 $curr['srh'] = 8;
 $curr['rcb'] = 8;
 
-/* Upcoming matches*/
+/* Upcoming matchess on the morning of 12th May 2013*/
 $matches = array();
-//$matches[]=array('kkr','rcb');
-//$matches[]=array('rr','csk');
+$matches[]=array('kkr','rcb');
+$matches[]=array('rr','csk');
 $matches[]=array('mi','srh');
 $matches[]=array('rcb','kxip');
 $matches[]=array('csk','dd');
@@ -26,7 +26,7 @@ $matches[]=array('srh','kkr');
 $numMatches = count($matches);
 $numPossibleOutcomes = pow(2,$numMatches);
 
-echo "numPossibleOutcomes = $numPossibleOutcomes\n";
+//echo "numPossibleOutcomes = $numPossibleOutcomes\n";
 
 foreach($whichTeams as $whichTeam) {
 	$yes = 0;
