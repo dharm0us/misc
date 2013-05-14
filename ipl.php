@@ -28,7 +28,7 @@ $numPossibleOutcomes = pow(2,$numMatches);
 
 //echo "numPossibleOutcomes = $numPossibleOutcomes\n";
 
-foreach($whichTeams as $whichTeam) {
+foreach($whichTeams as $currTeam) {
 	$yes = 0;
 	$no = 0;
 	$mayBe = 0;
@@ -43,19 +43,19 @@ foreach($whichTeams as $whichTeam) {
 				$final[$winner] += 1;
 			}
 		}
-		$numWins = $final[$whichTeam];
+		$numWins = $final[$currTeam];
 		rsort($final);
-		if($numWins > $final[4]) { //RR has won more than the fifth placed team
+		if($numWins > $final[4]) { //currTeam has won more than the fifth placed team
 			$yes++;
-		} else if($numWins < $final[3]) { //RR has won less than the fourth placed team
+		} else if($numWins < $final[3]) { //currTeam has won less than the fourth placed team
 			$no++;
-		} else { // There is a tie between 4th and 5th place and RR is one of them 
+		} else { // There is a tie between 4th and 5th place and currTeam is one of them 
 			$mayBe++;
 		};
 	} 
 	$yesProb = round(($yes/$numPossibleOutcomes),3);
 	$noProb = round(($no/$numPossibleOutcomes),3);
 	$mayBeProb = round(($mayBe/$numPossibleOutcomes),3);
-	echo "team = $whichTeam yes = $yesProb no = $noProb mayBe = $mayBeProb\n";
+	echo "team = $currTeam yes = $yesProb no = $noProb mayBe = $mayBeProb\n";
 }
 ?>
