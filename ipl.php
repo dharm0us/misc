@@ -28,34 +28,45 @@ $numPossibleOutcomes = pow(2,$numMatches);
 
 //echo "numPossibleOutcomes = $numPossibleOutcomes\n";
 
-foreach($whichTeams as $currTeam) {
-	$yes = 0;
-	$no = 0;
-	$mayBe = 0;
+$yes = array();
+$no = array();
+$mayBe = array();
 
-	for($possIter = 0; $possIter < $numPossibleOutcomes; $possIter++) {
-		$final = $curr;
-		for($matchIter = 0; $matchIter < $numMatches; $matchIter++) {
-			$winnerIndex = ($possIter >> $matchIter) & 1;	
-			$winner = $matches[$matchIter][$winnerIndex]; 
-			//echo $winner." ";
-			if(isset($final[$winner])) {
-				$final[$winner] += 1;
-			}
+for($possIter = 0; $possIter < $numPossibleOutcomes; $possIter++) {
+	$final = $curr;
+	for($matchIter = 0; $matchIter < $numMatches; $matchIter++) {
+		$winnerIndex = ($possIter >> $matchIter) & 1;	
+		$winner = $matches[$matchIter][$winnerIndex]; 
+		//echo $winner." ";
+		if(isset($final[$winner])) {
+			$final[$winner] += 1;
 		}
-		$numWins = $final[$currTeam];
+	}
+	$finalCopy = $final;
+	foreach($whichTeams as $currTeam) {
+		if(!isset($yes[$currTeam])) {
+			$yes[$currTeam] = 0;
+			$no[$currTeam] = 0;
+			$mayBe[$currTeam] = 0;
+		}
+		$numWins = $finalCopy[$currTeam];
 		rsort($final);
 		if($numWins > $final[4]) { //currTeam has won more than the fifth placed team
-			$yes++;
+			$yes[$currTeam]++;
 		} else if($numWins < $final[3]) { //currTeam has won less than the fourth placed team
-			$no++;
+			$no[$currTeam]++;
 		} else { // There is a tie between 4th and 5th place and currTeam is one of them 
-			$mayBe++;
+			$mayBe[$currTeam]++;
 		};
-	} 
-	$yesProb = round(($yes/$numPossibleOutcomes),3);
-	$noProb = round(($no/$numPossibleOutcomes),3);
-	$mayBeProb = round(($mayBe/$numPossibleOutcomes),3);
+
+	}
+} 
+
+foreach($whichTeams as $currTeam) {
+	$yesProb = round(($yes[$currTeam]/$numPossibleOutcomes),3);
+	$noProb = round(($no[$currTeam]/$numPossibleOutcomes),3);
+	$mayBeProb = round(($mayBe[$currTeam]/$numPossibleOutcomes),3);
 	echo "team = $currTeam yes = $yesProb no = $noProb mayBe = $mayBeProb\n";
 }
+echo memory_get_peak_usage();
 ?>
