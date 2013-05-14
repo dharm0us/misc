@@ -43,6 +43,7 @@ for($possIter = 0; $possIter < $numPossibleOutcomes; $possIter++) {
 		}
 	}
 	$finalCopy = $final;
+	rsort($final);
 	foreach($whichTeams as $currTeam) {
 		if(!isset($yes[$currTeam])) {
 			$yes[$currTeam] = 0;
@@ -50,7 +51,6 @@ for($possIter = 0; $possIter < $numPossibleOutcomes; $possIter++) {
 			$mayBe[$currTeam] = 0;
 		}
 		$numWins = $finalCopy[$currTeam];
-		rsort($final);
 		if($numWins > $final[4]) { //currTeam has won more than the fifth placed team
 			$yes[$currTeam]++;
 		} else if($numWins < $final[3]) { //currTeam has won less than the fourth placed team
