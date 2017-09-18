@@ -1,0 +1,31 @@
+//c# fetch URL
+internal static string FetchURL(string url)
+        {
+          
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            
+            request.Headers.Add("Accept-Charset", "UTF-8");
+            request.AutomaticDecompression = DecompressionMethods.GZip;
+            request.Accept = "application/json;odata.metadata=minimal";
+            request.UserAgent = "Microsoft ADO.NET Data Services";
+            
+            HttpWebResponse response;
+            try
+            {
+                response = (HttpWebResponse)request.GetResponse();
+            }
+            catch (WebException e)
+            {
+                return e.ToString();
+            }
+
+            string responseBody = string.Empty;
+            using (Stream stream = response.GetResponseStream())
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                responseBody = reader.ReadToEnd();
+            }
+
+            return responseBody;
+        }
