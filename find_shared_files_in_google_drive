@@ -1,0 +1,53 @@
+function listSharedFilesWithoutAdvancedService() {
+  const sheetName = 'Shared Files'; // Name of the sheet where data will be listed
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = spreadsheet.getSheetByName(sheetName);
+
+  // If the sheet doesn't exist, create it
+  if (!sheet) {
+    sheet = spreadsheet.insertSheet(sheetName);
+  } else {
+    sheet.clearContents(); // Clear existing content if sheet exists
+  }
+
+  const headers = ['File Name', 'URL', 'Owner', 'Editors', 'Viewers'];
+  sheet.appendRow(headers); // Set headers
+
+  const driveFiles = DriveApp.getFiles(); // Get all files in Drive
+
+  let fileCount = 0;
+  let sharedFileCount = 0;
+
+  while (driveFiles.hasNext()) {
+    const file = driveFiles.next();
+    fileCount++;
+
+    const fileName = file.getName();
+    const fileUrl = file.getUrl();
+    const owner = file.getOwner() ? file.getOwner().getEmail() : 'Unknown';
+
+    const editors = file.getEditors().map(editor => editor.getEmail()).join(', ');
+    const viewers = file.getViewers().map(viewer => viewer.getEmail()).join(', ');
+
+    // Check if the file is shared (has editors or viewers beyond the owner)
+    if (editors || viewers) {
+      sharedFileCount++;
+      sheet.appendRow([
+        fileName,
+        fileUrl,
+        owner,
+        editors || 'None',
+        viewers || 'None'
+      ]);
+    }
+
+    // Optional: Log progress every 100 files
+    if (fileCount % 100 === 0) {
+      Logger.log(`Processed ${fileCount} files. Found ${sharedFileCount} shared files so far.`);
+    }
+  }
+
+  // Format the sheet for better readability
+  sheet.autoResizeColumns(1, headers.length);
+  SpreadsheetApp.getUi().alert(`Shared files listing complete!\nTotal Files Processed: ${fileCount}\nShared Files Found: ${sharedFileCount}`);
+}
